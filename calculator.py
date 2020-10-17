@@ -5,11 +5,13 @@ from tkinter import *
 root = Tk()
 #root.geometry("450x500")]
 
+# initializing frames 
 frame_1 = Frame(root)
 frame_1.pack()
 frame_2 = Frame(root)
 frame_2.pack()
 
+# initializng labels and entry widgets for the gui
 Label(frame_1, pady = 1).pack()
 my_entry = Entry(frame_1, width = 51, borderwidth = 5, justify = RIGHT)
 my_entry.pack()
@@ -17,48 +19,71 @@ display_label = Label(frame_1, width = 40, anchor = E)
 display_label.pack()
 Label(frame_1, pady = 1).pack()
 
+# variables to track numbers and operations pressed 
 number_array = []
 operations_array = []
 temp_string = ""
 
 def update_label():
+    """ 
+    Updates the entry widget to display selected numbers and operations
+    """
    
     global temp_string 
     temp_string = ""
     
+    # loops through the number and operatiosn array and displays them on entry widget
     for i in range(len(number_array)):
         temp_string = temp_string+str(number_array[i])+str(operations_array[i])
     
     display_label["text"] = temp_string
 
 def button_click(num):
+    """ 
+    Displays the number pressed on the entry widget 
+    """
     my_entry.insert(END,num)
 
 def button_add():
+    """ 
+    Appends the numbers and + operation respective arrays and updates the entry widget 
+    """
     number_array.append(int(my_entry.get()))
     operations_array.append("+")
     my_entry.delete(0,END)
     update_label()
 
 def button_sub():
+    """ 
+    Appends the numbers and - operation respective arrays and updates the entry widget 
+    """
     number_array.append(int(my_entry.get()))
     operations_array.append("-")
     my_entry.delete(0,END)
     update_label()
     
 def button_mul():
+    """ 
+    Appends the numbers and * operation respective arrays and updates the entry widget 
+    """
     number_array.append(int(my_entry.get()))
     operations_array.append("x")
     my_entry.delete(0,END)
     update_label()
 
 def button_div():
+    """ 
+    Appends the numbers and ÷ operation respective arrays and updates the entry widget 
+    """
     number_array.append(int(my_entry.get()))
     operations_array.append("÷")
     my_entry.delete(0,END)
     update_label()
 
 def button_clear():
+    """
+    Clears the previously stored operations, numbers and clears the entry widget
+    """
     my_entry.delete(0,END)
     number_array.clear()
     operations_array.clear()
@@ -66,6 +91,11 @@ def button_clear():
     update_label()
 
 def button_equal():
+    """
+    Evaluates each operation individually by going through the numbers and operations list and 
+    following BEDMAS while shrinking the lists after each operation has been completed.
+    The final number will be the first number of the list after all loops are finished. 
+    """
     number_array.append(int(my_entry.get()))
     operations_array.append("")
     my_entry.delete(0,END)
@@ -75,17 +105,21 @@ def button_equal():
     temp_operations = operations_array
     temp_operations.pop()
     
+    # loops through all of the numbers and operations list
     for j in range(len(temp_num)):
         #print(temp_num)
         #print(temp_operations)
-        #checking for multiplications 
+
+        #checking for multiplication operations
         for i in range(len(temp_num)-1):
             try:
+                # if the multiplication is the first operation
                 if (temp_operations[i] == 'x') and (i-1 == -1):
                     temp_num[i] = temp_num[i]*temp_num[i+1]
                     temp_num.pop(i+1)
                     temp_operations.pop(i)
                 
+                # if the operation prior to the multiplication is division, it skips it
                 if (temp_operations[i] == 'x') and (temp_operations[i-1] == "÷"):
                     pass
                 
@@ -97,14 +131,16 @@ def button_equal():
             except IndexError:
                 continue
             
-        #checking for divisions
+        #checking for division operations
         for i in range(len(temp_num)-1):
             try: 
+                #if division is the first operation
                 if (temp_operations[i] == '÷') and (i-1 == -1):
                     temp_num[i] = temp_num[i]/temp_num[i+1]
                     temp_num.pop(i+1)
                     temp_operations.pop(i)
                 
+                # if operation prior to division is multiplication, it skips it
                 if (temp_operations[i] == '÷') and (temp_operations[i-1] == "x"):
                     pass
                 
@@ -129,7 +165,8 @@ def button_equal():
                     temp_num[i] = temp_num[i]-temp_num[i+1]
                     temp_num.pop(i+1)
                     temp_operations.pop(i)
-                
+
+                # if operation prior to subtraction is addition, it skips it
                 if (temp_operations[i] == '-') and (temp_operations[i-1] == "+"):
                     pass
                 
@@ -151,7 +188,8 @@ def button_equal():
                     temp_num[i] = temp_num[i]+temp_num[i+1]
                     temp_num.pop(i+1)
                     temp_operations.pop(i)
-                
+
+                # if operation prior to subtraction is addition, it skips it
                 if (temp_operations[i] == '+') and (temp_operations[i-1] == "-"):
                     pass
                 
@@ -162,11 +200,14 @@ def button_equal():
                     
             except IndexError:
                 continue
-            
+    # prints out the final number which is the first number in temp_num array        
     my_entry.insert(0,temp_num[0]) 
 
 
 def button_del():
+    """
+    Deletes the last digit entered
+    """
     length = len(my_entry.get())
     my_entry.delete(length-1,END)
 

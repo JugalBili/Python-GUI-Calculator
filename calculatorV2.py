@@ -3,62 +3,86 @@
 
 from tkinter import *
 root = Tk()
-#root.geometry("450x500")]
+#root.geometry("450x500")
 
+# initializing frames 
 frame_1 = Frame(root)
 frame_1.pack()
 frame_2 = Frame(root)
 frame_2.pack()
 
-spacer = Label(frame_1, pady = 1).pack()
+# initializng labels and entry widgets for the gui
+Label(frame_1, pady = 1).pack()
 my_entry = Entry(frame_1, width = 51, borderwidth = 5, justify = RIGHT)
 my_entry.pack()
 display_label = Label(frame_1, width = 40, anchor = E)
 display_label.pack()
-spacer = Label(frame_1, pady = 1).pack()
+Label(frame_1, pady = 1).pack()
 
+# variables to track numbers and operations pressed 
 number_array = []
 operations_array = []
 temp_string = ""
 
 def update_label():
-   
+    """ 
+    Updates the entry widget to display selected numbers and operations
+    """
     global temp_string 
     temp_string = ""
     
+    # loops through the number and operatiosn array and displays them on entry widget
     for i in range(len(number_array)):
         temp_string = temp_string+str(number_array[i])+" "+str(operations_array[i]+" ")
     
     display_label["text"] = temp_string
 
 def button_click(num):
+    """ 
+    Displays the number pressed on the entry widget 
+    """
     my_entry.insert(END,num)
 
 def button_add():
+    """ 
+    Appends the numbers and operation to operations array and updates the entry widget 
+    """
     number_array.append(int(my_entry.get()))
     operations_array.append("+")
     my_entry.delete(0,END)
     update_label()
 
 def button_sub():
+    """ 
+    Appends the numbers and - operation respective arrays and updates the entry widget 
+    """
     number_array.append(int(my_entry.get()))
     operations_array.append("-")
     my_entry.delete(0,END)
     update_label()
     
 def button_mul():
+    """ 
+    Appends the numbers and * operation respective arrays and updates the entry widget 
+    """
     number_array.append(int(my_entry.get()))
     operations_array.append("x")
     my_entry.delete(0,END)
     update_label()
 
 def button_div():
+    """ 
+    Appends the numbers and ÷ operation respective arrays and updates the entry widget 
+    """
     number_array.append(int(my_entry.get()))
     operations_array.append("÷")
     my_entry.delete(0,END)
     update_label()
 
 def button_clear():
+    """
+    Clears the previously stored operations, numbers and clears the entry widget
+    """
     my_entry.delete(0,END)
     number_array.clear()
     operations_array.clear()
@@ -66,15 +90,20 @@ def button_clear():
     update_label()
 
 def button_equal():
+    """
+    Adds the stored numbers and operations in a temporary sting and uses
+    eval() to evaluate the expression
+    """
     number_array.append(int(my_entry.get()))
     operations_array.append("")
     my_entry.delete(0,END)
     update_label()
     
+    # temp string to store expression
     temp = ""
     temp_operations = operations_array
 
-    
+    # loop to make expression from arrays and with proper operation symbols
     for i in range(len(number_array)):
         if(temp_operations[i] == "x"):
             temp_operations[i] = "*"
@@ -84,13 +113,19 @@ def button_equal():
             
         temp = temp+str(number_array[i])+" "+str(temp_operations[i]+" ")
     
+    # tries to evaluate the expression 
     try: 
         my_entry.insert(0,eval(temp))
-    except:
+
+    # catches any errors and displays 'ERROR' in the text area
+    except: 
         my_entry.insert(0,"ERROR!")
 
 
 def button_del():
+    """
+    Deletes the last digit entered
+    """
     length = len(my_entry.get())
     my_entry.delete(length-1,END)
 
