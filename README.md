@@ -11,7 +11,7 @@
 
 ---
 ## Description
-This program is a simple 4 function GUI calculator made using the Tkinter Pyhton toolkit. 
+This program is a simple 4 function GUI calculator made using the Tkinter Python toolkit. 
 There are two versions included in the source folder: 
 "calculatorV2.py" evaluates the expression using the `eval()` function in Python. "calculator.py" uses individual functions for when it detects the respective operation being used.
 
